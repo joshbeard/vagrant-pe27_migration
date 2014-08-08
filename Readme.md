@@ -31,7 +31,7 @@ A corresponding guide for this procedure is available at [https://docs.google.co
 
 An graphical overview of this procedure:
 
-![overview](/docs/overview.jpg)
+![overview](/docs/overview.jpg?raw=true)
 
 **Four instances are provided:**
 
