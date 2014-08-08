@@ -31,7 +31,7 @@ A corresponding guide for this procedure is available at [https://docs.google.co
 
 An graphical overview of this procedure:
 
-![overview](/docs/overview.jpg?raw=true)
+![overview](https://raw.githubusercontent.com/joshbeard/vagrant-pe27_migration/master/docs/overview.jpg)
 
 **Four instances are provided:**
 
