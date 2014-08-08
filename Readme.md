@@ -356,3 +356,11 @@ This makes use of Greg Sarjeant's [data-driven-vagrantfile](https://github.com/g
 Contributions are very welcome.
 
 Future revisions, if valuable, might include instructions for a split-install.
+
+## Why not use Vagrant plugin $x?
+
+I didn't want this to have any dependencies required to be installed.
+
+I know that [pe_build](https://github.com/adrienthebo/vagrant-pe_build) would make this
+cleaner.  Yeah, [config_builder](https://github.com/adrienthebo/vagrant-config_builder)
+could also make it cleaner.
