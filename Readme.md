@@ -16,11 +16,6 @@ PE 2.7 and import the databases from the existing 2.7 master.  The temporary
 system will be upgraded to 2.8.2.  From 2.8.2, it will be upgraded to 3.3, thus
 migrating the databases that we can use on our new, permanent master.
 
-The new 3.3 master should have the same `certname` as the in-place 2.7 master
-that's being migrated to.  This is to provide a seamless transition for any
-agents currently using the 2.7 master. Without this, all SSL certificates
-would have to be re-generated and re-signed.
-
 You could, technically, upgrade the same box in incremental versions, but that's
 usually undesirable and generally preferable to start with a clean system.
 
