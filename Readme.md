@@ -29,7 +29,7 @@ specific steps for upgrading the 2.7 instance to 2.8
 
 A corresponding guide for this procedure is available at [https://docs.google.com/document/d/1UlIxWLRT9_bbO0cK93xGPJYFbTGx_3rifFimIxWPb9g/edit?usp=sharing](https://docs.google.com/document/d/1UlIxWLRT9_bbO0cK93xGPJYFbTGx_3rifFimIxWPb9g/edit?usp=sharing)
 
-An graphical overview of this procedure:
+A graphical overview of this procedure:
 
 [https://raw.githubusercontent.com/joshbeard/vagrant-pe27_migration/master/docs/overview.jpg](https://raw.githubusercontent.com/joshbeard/vagrant-pe27_migration/master/docs/overview.jpg)
 
