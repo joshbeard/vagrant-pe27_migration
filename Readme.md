@@ -92,11 +92,12 @@ Export the databases.  In this Vagrant environment, the script for this is at
 `/vagrant/xfer/db.sh`:
 
 ```shell
-/vagrant/xfer/db.sh export
+cd /vagrant/xfer
+./db.sh export
 ```
 
 This should dump three databases to the current working directory.
-To make sharing easier, you might run this from the `/vagrant` directory.
+To make sharing easier, you might run this from the `/vagrant/xfer` directory.
 
 ***
 
@@ -107,7 +108,8 @@ To make sharing easier, you might run this from the `/vagrant` directory.
 Import the databases from the `master27` box:
 
 ```shell
-/vagrant/xfer/db.sh import
+cd /vagrant/xfer
+./db.sh import
 ```
 
 This will expect to find the SQL files for import in the current working
@@ -154,7 +156,8 @@ After the temporary master is upgraded to 3.3.1, you're ready to export the
 databases.
 
 ```shell
-/vagrant/xfer/db.sh export
+cd /vagrant/xfer
+./db.sh export
 ```
 
 ***
@@ -168,7 +171,8 @@ PE 3.3 is already installed on this master (it was a clean install - not an
 upgrade).
 
 ```shell
-/vagrant/xfer/db.sh import
+cd /vagrant/xfer
+./db.sh import
 ```
 
 ### 3. SSL Migration
