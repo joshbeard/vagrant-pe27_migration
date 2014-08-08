@@ -318,9 +318,11 @@ Try to run the new PE 3.3 master agent:
 /opt/puppet/bin/puppet agent -t
 ```
 
-Login to the new 3.3 master's console ([https://10.0.4.61](https://10.0.4.61))
+Login to the new 3.3 master's console ([https://10.0.4.62](https://10.0.4.62))
 and verify things look right - your example user, your bogus class, and other
 things.
+
+You can safely remove the `tempmaster` system at this point.
 
 ### 5. Upgrade Agents
 
