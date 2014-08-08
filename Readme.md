@@ -283,8 +283,6 @@ cd /opt/puppet/share/puppet-dashboard
 
 **Generate certificates for peadmin (mcollective):**
 
-This assumes you weren't previously using Mcollective on 2.7.
-
 ```shell
 /opt/puppet/bin/puppet cert generate peadmin
 ```
