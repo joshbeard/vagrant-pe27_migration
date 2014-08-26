@@ -150,6 +150,24 @@ Once upgraded, you might check the console to ensure it functions correctly.
 Once upgraded, you might check the console to ensure it functions correctly and
 that your sample user and class are there.
 
+**Potential Pitfalls**
+
+You might see something like this during the upgrade:
+
+```
+ERROR: invalid byte sequence for encoding "UTF8": 0x00
+```
+
+And the database migration could fail.  There's a few posts online about this,
+and a common solution is to replace the NULL bytes.  Something like this:
+
+```
+sed 's/\x00//g' console.sql
+```
+
+The unfortunate thing is, this database is likely very large, so any operations
+will take a while.
+
 #### 2.5 Export the temporary master's databases
 
 **On `tempmaster`**
