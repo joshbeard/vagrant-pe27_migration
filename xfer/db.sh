@@ -6,7 +6,7 @@
 ## https://github.com/joshbeard
 ##
 DBROOT=$(awk -F = '/q_puppet_enterpriseconsole_database_root_password/{print $2}' \
-        /etc/puppetlabs/installer/database_info.install)
+  /etc/puppetlabs/installer/database_info.install)
 
 PE2_DATABASES="console console_auth console_inventory_service"
 PE3_DATABASES="console console_auth pe-puppetdb"
@@ -14,6 +14,19 @@ PE3_DATABASES="console console_auth pe-puppetdb"
 PE_VERSION=$(/opt/puppet/bin/facter -p pe_version)
 
 ACTION="$1"
+
+for i in "$@"
+do
+  case $i in
+    -r|--ignore-reports*)
+      IGNORE_REPORTS=true
+      shift
+      ;;
+    *)
+      # unknown option
+      ;;
+  esac
+done
 
 ## Usage
 if [ -z "$1" ]; then
@@ -47,34 +60,40 @@ fi
 
 ## Function for exporting databases
 function export_db() {
-  for db in $DATABASES; do
-    echo "Dumping ${db} to ./${db}.sql..."
-    if [[ "$PE_VERSION" == 2.?.? ]]; then
-      /usr/bin/mysqldump -u root --password=${DBROOT} ${db} > ${db}.sql
-    elif [[ "$PE_VERSION" == 3.?.? ]]; then
-      su - pe-postgres -s /bin/bash -c \
-        "/opt/puppet/bin/pg_dump -Fc -p 5432 ${db}" > ${db}.sql
+for db in $DATABASES; do
+  echo "Dumping ${db} to ./${db}.sql..."
+  if [[ "$PE_VERSION" == 2.?.? ]]; then
+    if [ "$IGNORE_REPORTS" == 'true' ]; then
+      EXT_OPTS="--ignore-table=console.reports --ignore-table=console.report_logs --ignore-table=console.old_reports"
     fi
-  done
+    /usr/bin/mysqldump -u root --password=${DBROOT} ${EXT_OPTS} ${db} > ${db}.sql
+  elif [[ "$PE_VERSION" == 3.?.? ]]; then
+    su - pe-postgres -s /bin/bash -c \
+      "/opt/puppet/bin/pg_dump -Fc -p 5432 ${db}" > ${db}.sql
+  fi
+done
 }
 
 ## Function for importing databases
 function import_db() {
-  for db in $DATABASES; do
-    echo "Restoring ${db} from ./${db}.sql..."
-    if [[ "$PE_VERSION" == 2.?.? ]]; then
-      /usr/bin/mysql -u root --password=${DBROOT} ${db} < ${db}.sql
-    elif [[ "$PE_VERSION" == 3.?.? ]]; then
-      su - pe-postgres -s /bin/bash -c \
-        "/opt/puppet/bin/pg_restore -Fc -c -d ${db} -p 5432 ${PWD}/${db}.sql"
-    fi
-  done
+for db in $DATABASES; do
+  echo "Restoring ${db} from ./${db}.sql..."
+  if [[ "$PE_VERSION" == 2.?.? ]]; then
+    /usr/bin/mysql -u root --password=${DBROOT} ${db} < ${db}.sql
+  elif [[ "$PE_VERSION" == 3.?.? ]]; then
+    su - pe-postgres -s /bin/bash -c \
+      "/opt/puppet/bin/pg_restore -Fc -c -d ${db} -p 5432 ${PWD}/${db}.sql"
+  fi
+done
 }
 
 echo "========================================================================"
 echo "Database migration for PE version ${PE_VERSION}"
 echo
-echo "This will dump the databases to the current working directory"
+if [ "$IGNORE_REPORTS" == 'true' ]; then
+  echo "**** REPORTS WILL NOT BE EXPORTED ****"
+fi
+echo "This will dump/restore the databases to/from the current working directory"
 echo
 
 if [ "$ACTION" == 'export' ]; then

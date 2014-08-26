@@ -94,6 +94,13 @@ cd /vagrant/xfer
 This should dump three databases to the current working directory.
 To make sharing easier, you might run this from the `/vagrant/xfer` directory.
 
+If you want to skip exporting the reports, you can pass the `--ignore-reports`
+argument to the script.  For example:
+
+```shell
+./db.sh export --ignore-reports
+```
+
 ***
 
 #### 2.2 Import the original databases into the temporary master
