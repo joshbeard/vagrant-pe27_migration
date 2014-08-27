@@ -15,15 +15,28 @@ PE_VERSION=$(/opt/puppet/bin/facter -p pe_version)
 
 ACTION="$1"
 
+ORIG_IFS=$IFS
+
 for i in "$@"
 do
   case $i in
-    -r|--ignore-reports*)
-      IGNORE_REPORTS=true
+    -r|--ignore-tables*)
+      IGNORE_TABLES="${i#*=}"
       shift
       ;;
-    *)
+    -h|--help*)
       # unknown option
+      echo "Usage: $0 <import|export> [options]"
+      echo
+      echo "Options:"
+      echo "  -r, --ignore-tables  Comma-separated list of tables to ignore when dumping."
+      echo "                       Example: --ignore-tables=console.reports,console.old_reports"
+      echo
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: ${i}"
+      exit 1
       ;;
   esac
 done
@@ -63,10 +76,15 @@ function export_db() {
 for db in $DATABASES; do
   echo "Dumping ${db} to ./${db}.sql..."
   if [[ "$PE_VERSION" == 2.?.? ]]; then
-    if [ "$IGNORE_REPORTS" == 'true' ]; then
-      EXT_OPTS="--ignore-table=console.reports --ignore-table=console.report_logs --ignore-table=console.old_reports"
+    if [ ! -z "$IGNORE_TABLES" ]; then
+      IFS=","
+      EXT_OPTS=""
+      for table in $IGNORE_TABLES; do
+        EXT_OPTS="--ignore-table=${table} ${EXT_OPTS}"
+      done
     fi
-    /usr/bin/mysqldump -u root --password=${DBROOT} ${EXT_OPTS} ${db} > ${db}.sql
+    IFS=$ORIG_IFS
+    echo "/usr/bin/mysqldump -u root --password=${DBROOT} ${EXT_OPTS} ${db} > ${db}.sql"
   elif [[ "$PE_VERSION" == 3.?.? ]]; then
     su - pe-postgres -s /bin/bash -c \
       "/opt/puppet/bin/pg_dump -Fc -p 5432 ${db}" > ${db}.sql

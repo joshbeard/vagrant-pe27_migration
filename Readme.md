@@ -94,12 +94,16 @@ cd /vagrant/xfer
 This should dump three databases to the current working directory.
 To make sharing easier, you might run this from the `/vagrant/xfer` directory.
 
-If you want to skip exporting the reports, you can pass the `--ignore-reports`
+If you want to skip exporting certain tables, you can pass the `--ignore-tables`
 argument to the script.  For example:
 
 ```shell
-./db.sh export --ignore-reports
+./db.sh export --ignore-tables=console.reports,console.old_reports
 ```
+
+The `--ignore-tables` option takes a comma-separated list of tables that will
+be ignored when reporting.  This might be useful in instances where reports
+aren't desirable to migrate.
 
 ***
 
